@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Blogs</title>
+  <link rel="stylesheet" href="/styles/main.css">
+</head>
+<body>
+    <%-include("partials/Header.ejs")%>
+
+  <main>
+    <section class="blog-editor">
+      <h2>New Blog Post</h2>
+      <form action="/add-post" method="POST">
+        <input type="text" name="title" placeholder="Blog Title" required>
+        <textarea name="content" placeholder="Blog Content" required></textarea>
+        <button type="submit">Add Post</button>
+      </form>
+    </section>
+
+    <section class="blog-list">
+      <% if (posts && posts.length > 0) { %>
+        <% posts.forEach(post => { %>
+          <article class="blog-post" data-id="<%= post.postID %>">
+            <h2><%= post.title %></h2>
+            <p><%= post.content %></p>
+            <div class="blog-controls">
+              <button class="edit-button" onclick="editPost(<%= post.postID %>)">Edit</button>
+              <button class="delete-button" onclick="deletePost(<%= post.postID %>)">Delete</button>
+            </div>
+          </article>
+        <% }) %>
+      <% } else { %>
+        <p>No blog posts available.</p>
+      <% } %>
+    </section>
+
+    <!-- Edit Modal -->
+    <div id="edit-modal" class="modal hidden">
+      <div class="modal-content">
+        <h2>Edit Blog Post</h2>
+        <form id="edit-form">
+          <input type="hidden" id="edit-post-id">
+          <input type="text" id="edit-title" placeholder="Blog Title" required>
+          <textarea id="edit-content" placeholder="Blog Content" required></textarea>
+          <button type="submit">Save Changes</button>
+          <button type="button" onclick="closeModal()">Cancel</button>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <script src="/functionalities/admin.js"></script>
+</body>
+</html>
